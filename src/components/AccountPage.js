@@ -27,7 +27,7 @@ const AccountPage = () => {
           },
         };
 
-        const response = await fetch("https://fika-backend.onrender.com/api/check-spaces-from-user", requestOptions);
+        const response = await fetch("http://localhost:3001/api/check-spaces-from-user", requestOptions);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -35,7 +35,7 @@ const AccountPage = () => {
 
         const spacesData = await response.json();
         setSpaces(spacesData);
-        setFilteredSpaces(spacesData);
+        setFilteredSpaces(spacesData); // Initialize filteredSpaces with all data
       } catch (error) {
         setError(error.message);
         console.error('There was a problem with the fetch operation:', error);
@@ -56,7 +56,7 @@ const AccountPage = () => {
           },
         };
 
-        const response = await fetch("https://fika-backend.onrender.com/api/check-arts-from-user", requestOptions);
+        const response = await fetch("http://localhost:3001/api/check-arts-from-user", requestOptions);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -64,7 +64,7 @@ const AccountPage = () => {
 
         const artsData = await response.json();
         setArtworks(artsData);
-        console.log(artsData)
+        setFilteredArtworks(artsData); // Initialize filteredArtworks with all data
       } catch (error) {
         setError(error.message);
         console.error('There was a problem with the fetch operation:', error);
@@ -101,8 +101,9 @@ const AccountPage = () => {
     });
     setFilteredArtworks(filteredArtworksData);
   };
+  
 
-    return (
+  return (
     <div>
       <SearchBox onSearch={handleSearch} />
       <div className="container-fluid tm-container-content tm-mt-60">
