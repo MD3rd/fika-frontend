@@ -201,7 +201,7 @@ const ViewArt = () => {
                 {commentsData && commentsData.length>0 ? commentsData.map((comment) => (
                 <div className="be-comment">
                     <div className="be-img-comment">
-                        <img src={(comment.username === 'God_Mint') ? godMintImage :((comment.username===username) ? userImage : randomImage)} className="comment-profile" />
+                        <img src={(comment.username === 'God_mint') ? godMintImage :((comment.username===username) ? userImage : randomImage)} className="comment-profile" />
                     </div>
                     <div className="be-comment-content">
                         <span style={{fontSize: '18px'}}>
