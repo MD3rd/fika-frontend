@@ -31,7 +31,7 @@ const EditSpaces = () => {
         },
       };
 
-      const response = await fetch("http://localhost:3001/api/check-spaces-from-user", requestOptions);
+      const response = await fetch("https://fika-backend.onrender.com/api/check-spaces-from-user", requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -59,7 +59,7 @@ const EditSpaces = () => {
         },
       };
 
-      const response = await fetch("http://localhost:3001/api/check-arts-from-user", requestOptions);
+      const response = await fetch("https://fika-backend.onrender.com/api/check-arts-from-user", requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -93,7 +93,7 @@ const EditSpaces = () => {
     if (!selectedSpaceId) return;
   
     try {
-      const response = await fetch('http://localhost:3001/api/delete-spaces', {
+      const response = await fetch('https://fika-backend.onrender.com/api/delete-spaces', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ const EditSpaces = () => {
   const handleUpdateTitle = async () => {
     if (editTitle && selectedSpaceId) {
       try {
-        const response = await fetch('http://localhost:3001/api/update-space-title', {
+        const response = await fetch('https://fika-backend.onrender.com/api/update-space-title', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title: editTitle, spaceID: selectedSpaceId }),
@@ -160,7 +160,7 @@ const EditSpaces = () => {
   const handleOnChangeStatus = async (e, spaceId) => {
     const newStatus = e.target.value;
     try {
-      const response = await fetch('http://localhost:3001/api/update-space-status', {
+      const response = await fetch('https://fika-backend.onrender.com/api/update-space-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, spaceID: spaceId }),
@@ -182,7 +182,7 @@ const EditSpaces = () => {
   const handleUpdateTag = async () => {
     if (editTag && selectedSpaceId) {
       try {
-        const response = await fetch('http://localhost:3001/api/update-space-tags', {
+        const response = await fetch('https://fika-backend.onrender.com/api/update-space-tags', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ tag: editTag, spaceID: selectedSpaceId }),
