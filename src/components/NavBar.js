@@ -7,7 +7,7 @@ import godMintImage from "../images/godMint.png";
 const NavBar = () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     const username = user ? user.username : null;
-    const userImage = (user && user.userid === 2) ? godMintImage : (user ? user.image : null);
+    const userImage = (user && user.username === 'God_mint') ? godMintImage : (user ? user.image : null);
 
     const navigate = useNavigate(); // useNavigate hook from react-router-dom
 
