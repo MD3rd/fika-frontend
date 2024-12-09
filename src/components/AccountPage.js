@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SearchBox from './SearchBox';
 import './style.css';
 
@@ -6,6 +7,11 @@ const AccountPage = () => {
   const [spaces, setSpaces] = useState([]);
   const [artworks, setArtworks] = useState([]);
   const [error, setError] = useState(null);
+  const [filteredSpaces, setFilteredSpaces] = useState([]);
+  const [filteredArtworks, setFilteredArtworks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const navigate = useNavigate();
   
   useEffect(() => {
     const fetchSpaces = async () => {
@@ -29,6 +35,7 @@ const AccountPage = () => {
 
         const spacesData = await response.json();
         setSpaces(spacesData);
+        setFilteredSpaces(spacesData);
       } catch (error) {
         setError(error.message);
         console.error('There was a problem with the fetch operation:', error);
@@ -66,9 +73,38 @@ const AccountPage = () => {
     fetchArts();
   }, []);
 
+  const handleViewArt = (artId) => {
+    navigate('/view-art', { state: { artId } });
+  }
+
+  const handleJoinSpace = (spaceId) => {
+    navigate('/create-avatar', { state: { spaceId } });
+  }
+
+  // Handle search functionality
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  
+    // Filter spaces based on search term
+    const filteredSpacesData = spaces.filter(space => {
+      const title = space.title || ''; // Default to empty string if title is null or undefined
+      const tag = space.tag || ''; // Default to empty string if tag is null or undefined
+      return title.toLowerCase().includes(term.toLowerCase()) ||
+        tag.toLowerCase().includes(term.toLowerCase());
+    });
+    setFilteredSpaces(filteredSpacesData);
+  
+    // Filter artworks based on search term
+    const filteredArtworksData = artworks.filter(art => {
+      const title = art.title || ''; // Default to empty string if title is null or undefined
+      return title.toLowerCase().includes(term.toLowerCase());
+    });
+    setFilteredArtworks(filteredArtworksData);
+  };
+
     return (
-      <div>
-      <SearchBox />
+    <div>
+      <SearchBox onSearch={handleSearch} />
       <div className="container-fluid tm-container-content tm-mt-60">
         <div className="row mb-4">
             <h2 className="col-6 tm-text-primary">
@@ -79,7 +115,7 @@ const AccountPage = () => {
             </div>
         </div>
         <div className="row tm-mb-90 tm-gallery">
-          {spaces.length > 0 ? spaces.map((space) => (
+          {filteredSpaces.length > 0 ? filteredSpaces.map((space) => (
             <div key={space.space_id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                 <figure className="effect-ming tm-video-item">
                     <img
@@ -87,9 +123,8 @@ const AccountPage = () => {
                             alt="Default Image"
                             className="img-fluid"
                     />
-                    <figcaption className="d-flex align-items-center justify-content-center">
+                    <figcaption className="d-flex align-items-center justify-content-center" onClick={() => handleJoinSpace(space.space_id)}>
                         <h2>{space.title}</h2>
-                        <a href="map"></a>
                     </figcaption>
                 </figure>
                 <div className="d-flex justify-content-between tm-text-gray">
@@ -98,6 +133,8 @@ const AccountPage = () => {
                 </div>
                 <div className="d-flex justify-content-between tm-text-gray">
                     <span>Status: {space.status}</span>
+                </div>
+                <div className="d-flex justify-content-between tm-text-gray">
                     <span>Tags: {space.tag || 'None'}</span>
                 </div>
             </div>
@@ -116,7 +153,7 @@ const AccountPage = () => {
             </div>
         </div>
         <div className="row tm-mb-90 tm-gallery">
-          {artworks.length > 0 ? artworks.map((art) => (
+          {filteredArtworks.length > 0 ? filteredArtworks.map((art) => (
             <div key={art.art_id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                 <figure className="effect-ming tm-video-item">
                     <div className="zoom-container">  
@@ -126,9 +163,8 @@ const AccountPage = () => {
                             className="img-fluid"
                         />
                     </div>
-                    <figcaption className="d-flex align-items-center justify-content-center">
+                    <figcaption className="d-flex align-items-center justify-content-center" onClick={() => handleViewArt(art.art_id)}>
                         <h2>{art.title}</h2>
-                        <a href="map"></a>
                     </figcaption>
                 </figure>
                 <div className="d-flex justify-content-between tm-text-gray">
@@ -142,6 +178,7 @@ const AccountPage = () => {
         </div>
       </div>
     </div>
-    );
+  );
 }
+
 export default AccountPage;
