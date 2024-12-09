@@ -13,6 +13,10 @@ const EditSpaces = () => {
   const [editTitle,setEditTitle] = useState('');
   const [editTag,setEditTag] = useState('');
   const [editingField, setEditingField] = useState(null);
+
+  const [filteredSpaces, setFilteredSpaces] = useState([]);
+  const [filteredArtworks, setFilteredArtworks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const fetchSpaces = async () => {
     try {
@@ -27,7 +31,7 @@ const EditSpaces = () => {
         },
       };
 
-      const response = await fetch("https://fika-backend.onrender.com/api/check-spaces-from-user", requestOptions);
+      const response = await fetch("http://localhost:3001/api/check-spaces-from-user", requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -35,6 +39,7 @@ const EditSpaces = () => {
 
       const spacesData = await response.json();
       setSpaces(spacesData);
+      setFilteredSpaces(spacesData);
     } catch (error) {
       setError(error.message);
       console.error('There was a problem with the fetch operation:', error);
@@ -54,7 +59,7 @@ const EditSpaces = () => {
         },
       };
 
-      const response = await fetch("https://fika-backend.onrender.com/api/check-arts-from-user", requestOptions);
+      const response = await fetch("http://localhost:3001/api/check-arts-from-user", requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -62,6 +67,7 @@ const EditSpaces = () => {
 
       const artsData = await response.json();
       setArtworks(artsData);
+      setFilteredArtworks(artsData);
     } catch (error) {
       setError(error.message);
       console.error('There was a problem with the fetch operation:', error);
@@ -87,7 +93,7 @@ const EditSpaces = () => {
     if (!selectedSpaceId) return;
   
     try {
-      const response = await fetch('https://fika-backend.onrender.com/api/delete-spaces', {
+      const response = await fetch('http://localhost:3001/api/delete-spaces', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +133,7 @@ const EditSpaces = () => {
   const handleUpdateTitle = async () => {
     if (editTitle && selectedSpaceId) {
       try {
-        const response = await fetch('https://fika-backend.onrender.com/api/update-space-title', {
+        const response = await fetch('http://localhost:3001/api/update-space-title', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title: editTitle, spaceID: selectedSpaceId }),
@@ -154,7 +160,7 @@ const EditSpaces = () => {
   const handleOnChangeStatus = async (e, spaceId) => {
     const newStatus = e.target.value;
     try {
-      const response = await fetch('https://fika-backend.onrender.com/api/update-space-status', {
+      const response = await fetch('http://localhost:3001/api/update-space-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, spaceID: spaceId }),
@@ -176,7 +182,7 @@ const EditSpaces = () => {
   const handleUpdateTag = async () => {
     if (editTag && selectedSpaceId) {
       try {
-        const response = await fetch('https://fika-backend.onrender.com/api/update-space-tags', {
+        const response = await fetch('http://localhost:3001/api/update-space-tags', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ tag: editTag, spaceID: selectedSpaceId }),
@@ -204,10 +210,29 @@ const EditSpaces = () => {
     setIsEditing(false);
   }
  
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  
+    // Filter spaces based on search term
+    const filteredSpacesData = spaces.filter(space => {
+      const title = space.title || ''; // Default to empty string if title is null or undefined
+      const tag = space.tag || ''; // Default to empty string if tag is null or undefined
+      return title.toLowerCase().includes(term.toLowerCase()) ||
+        tag.toLowerCase().includes(term.toLowerCase());
+    });
+    setFilteredSpaces(filteredSpacesData);
+  
+    // Filter artworks based on search term
+    const filteredArtworksData = artworks.filter(art => {
+      const title = art.title || ''; // Default to empty string if title is null or undefined
+      return title.toLowerCase().includes(term.toLowerCase());
+    });
+    setFilteredArtworks(filteredArtworksData);
+  };
  
   return (
     <div>
-      <SearchBox />
+      <SearchBox onSearch={handleSearch} />
       <div className="container-fluid tm-container-content tm-mt-60">
         <div className="row mb-4">
           <h2 className="col-6 tm-text-primary">Your Spaces</h2>
@@ -216,8 +241,8 @@ const EditSpaces = () => {
           </div>
         </div>
         <div className="row tm-mb-90 tm-gallery">
-          {spaces.map((space, index) => (
-            <div key={index} className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" style={{ position: 'relative' }}>
+          {filteredSpaces.length > 0 ? filteredSpaces.map((space) => (
+            <div key={space.space_id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" style={{ position: 'relative' }}>
                 <img
                     src={"data:image/jpeg;base64," + space.value}
                     alt="Default Image"
@@ -245,7 +270,7 @@ const EditSpaces = () => {
                 <span className="tm-text-gray-light">{new Date(space.created_at).toLocaleDateString()}</span>
                 <span style={{ fontWeight: 'bold' }}>
                   {selectedSpaceId === space.space_id && isEditing && editingField == 'title' ? (
-                    <>
+                    <div className="input-button-container">
                       <input
                         type="text"
                         value={editTitle}
@@ -259,7 +284,7 @@ const EditSpaces = () => {
                       <button className='btn-rename tm-text-gray' onClick={handleCancel}>
                         <i className="fas fa-times"></i>
                       </button>
-                      </>
+                    </div>
                     ) : (
                     <>
                       {space.title}
@@ -277,9 +302,12 @@ const EditSpaces = () => {
                     <option value='private'>private</option>
                   </select>
                 </span>
+              </div>
+              <div className="d-flex justify-content-between tm-text-gray">
                 <span>
                   {selectedSpaceId === space.space_id && isEditing  && editingField == 'tag' ? (
-                    <>
+                    <div className="input-button-container">
+                      <label>Tags: </label>
                       <input
                         type="text"
                         value={editTag}
@@ -294,7 +322,7 @@ const EditSpaces = () => {
                       <button className='btn-rename tm-text-gray' onClick={handleCancel}>
                         <i className="fas fa-times"></i>
                       </button>
-                      </>
+                    </div>
                     ) : (
                     <>
                       Tags: {space.tag || 'None'}
@@ -306,7 +334,9 @@ const EditSpaces = () => {
                 </span>
               </div>
             </div>
-          ))}
+          )): (
+            <p>No spaces found.</p>
+          )}
         </div>
         <div className="row mb-4">
             <h2 className="col-6 tm-text-primary">
@@ -317,7 +347,7 @@ const EditSpaces = () => {
             </div>
         </div>
         <div className="row tm-mb-90 tm-gallery">
-          {artworks.length > 0 ? artworks.map((art) => (
+          {filteredArtworks.length > 0 ? filteredArtworks.map((art) => (
             <div key={art.art_id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                 <figure className="effect-ming tm-video-item">
                     <div className="zoom-container">  
