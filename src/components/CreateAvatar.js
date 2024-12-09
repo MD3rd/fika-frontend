@@ -33,7 +33,7 @@ const CreateAvatar = () => {
     formData.append("user_id", userID); // Add the user_id or get from session/local storage
 
     try {
-      const response = await fetch("http://localhost:3001/api/save-avatar", {
+      const response = await fetch("https://fika-backend.onrender.com/api/save-avatar", {
         method: "POST",
         body: formData,
       });

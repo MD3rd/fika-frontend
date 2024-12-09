@@ -40,7 +40,7 @@ const ViewArt = () => {
             },
           };
   
-          const response = await fetch("http://localhost:3001/api/check-arts-from-artid", requestOptions);
+          const response = await fetch("https://fika-backend.onrender.com/api/check-arts-from-artid", requestOptions);
   
           if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -64,7 +64,7 @@ const ViewArt = () => {
             },
           };
   
-          const response = await fetch("http://localhost:3001/api/check-comments-from-artid", requestOptions);
+          const response = await fetch("https://fika-backend.onrender.com/api/check-comments-from-artid", requestOptions);
   
           if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -97,7 +97,7 @@ const ViewArt = () => {
                 },
             };
     
-            const response = await fetch("http://localhost:3001/api/add-comment", requestOptions);
+            const response = await fetch("https://fika-backend.onrender.com/api/add-comment", requestOptions);
     
             if (response.ok) {
                 setNewCommentText("");
@@ -119,7 +119,7 @@ const ViewArt = () => {
                     "Content-Type": "application/json",
                 },
             };
-            const response = await fetch("http://localhost:3001/api/edit-comment", requestOptions);
+            const response = await fetch("https://fika-backend.onrender.com/api/edit-comment", requestOptions);
             if (response.ok) {
                 fetchComments();
                 setEditCommentId(null);
@@ -142,7 +142,7 @@ const ViewArt = () => {
                     "Content-Type": "application/json",
                 },
             };
-            const response = await fetch("http://localhost:3001/api/delete-comment", requestOptions);
+            const response = await fetch("https://fika-backend.onrender.com/api/delete-comment", requestOptions);
             if (response.ok) {
                 fetchComments();
                 setShowDeleteModal(false);

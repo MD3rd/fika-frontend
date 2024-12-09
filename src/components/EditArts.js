@@ -23,7 +23,7 @@ const EditArts = () => {
         body: JSON.stringify({ userid: userID }),
       };
 
-      const response = await fetch("http://localhost:3001/api/check-spaces-from-user", requestOptions);
+      const response = await fetch("https://fika-backend.onrender.com/api/check-spaces-from-user", requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -48,7 +48,7 @@ const EditArts = () => {
         body: JSON.stringify({ userid: userID }),
       };
 
-      const response = await fetch("http://localhost:3001/api/check-arts-from-user", requestOptions);
+      const response = await fetch("https://fika-backend.onrender.com/api/check-arts-from-user", requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -80,7 +80,7 @@ const EditArts = () => {
     if (!selectedArtId) return;
   
     try {
-      const response = await fetch('http://localhost:3001/api/delete-arts', {
+      const response = await fetch('https://fika-backend.onrender.com/api/delete-arts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ const EditArts = () => {
   const handleUpdateTitle = async () => {
     if (editTitle && selectedArtId) {
       try {
-        const response = await fetch('http://localhost:3001/api/update-art-title', {
+        const response = await fetch('https://fika-backend.onrender.com/api/update-art-title', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title: editTitle, artId: selectedArtId }),

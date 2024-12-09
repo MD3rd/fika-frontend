@@ -36,7 +36,7 @@ const Login = () => {
             "Content-Type": "application/json",
           },
         };
-        const response = await fetch("http://localhost:3001/api/check-username",requestOptions);
+        const response = await fetch("https://fika-backend.onrender.com/api/check-username",requestOptions);
 
         const data = await response.json();
 

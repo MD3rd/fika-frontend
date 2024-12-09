@@ -28,7 +28,7 @@ const Register = () => {
       return;
     }
     
-    axios.post('http://localhost:3001/register', formData)
+    axios.post('https://fika-backend.onrender.com/register', formData)
     // Redirect back to Login.js after successful registration
     /*navigate("/login");*/
   };

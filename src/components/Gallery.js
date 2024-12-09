@@ -9,7 +9,7 @@ const Gallery = () => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const reqData = await fetch("http://localhost:3001/api/img");
+                const reqData = await fetch("https://fika-backend.onrender.com/api/img");
                 const resData = await reqData.json();
                 setImages(resData);
                 console.log(resData);

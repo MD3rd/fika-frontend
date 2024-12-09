@@ -8,7 +8,7 @@ const SearchComponent = () => {
   const handleSearch = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.get('http://localhost:3001/search', {
+      const response = await axios.get('https://fika-backend.onrender.com/search', {
         params: { q: searchTerm }
       });
       setResults(response.data);

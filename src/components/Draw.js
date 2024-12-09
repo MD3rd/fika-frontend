@@ -87,7 +87,7 @@ export default function Draw() {
       base64Image = base64Image.split(',')[1];
       
       try {
-        const response = await fetch('http://localhost:3001/api/save-image', {
+        const response = await fetch('https://fika-backend.onrender.com/api/save-image', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -20,7 +20,7 @@ const AccountPage = () => {
           },
         };
 
-        const response = await fetch("http://localhost:3001/api/check-spaces-from-user", requestOptions);
+        const response = await fetch("https://fika-backend.onrender.com/api/check-spaces-from-user", requestOptions);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
