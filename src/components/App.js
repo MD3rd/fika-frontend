@@ -21,6 +21,15 @@ function App() {
   const noNavBarPaths = ["/", "/login", "/register"];
   console.warn = () => {};
 
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  useEffect(() => {
+    const restrictedPaths = ["/join-space","/create-avatar","/map","/yourAccount","/editSpace","/editArt", "/draw", "/polygon", "/gallery", "/view-art", "/chat", "/god"];
+    
+    if (restrictedPaths.includes(location.pathname) && !user) {
+      navigate('/');
+    }
+  }, [location.pathname, user, navigate]);
+
   return (
     <div>
       {/* Conditionally render NavBar only if not on the homepage */}
