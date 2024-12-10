@@ -23,7 +23,7 @@ function App() {
 
   const user = JSON.parse(sessionStorage.getItem("user"));
   useEffect(() => {
-    const restrictedPaths = ["/join-space","/create-avatar","/map","/yourAccount","/editSpace","/editArt", "/draw", "/gallery", "/view-art", "/chat", "/god"];
+    const restrictedPaths = ["/join-space","/create-avatar","/map","/yourAccount","/editSpace","/editArt", "/draw", "/gallery", "/view-art","/god"];
     
     if (restrictedPaths.includes(location.pathname) && !user) {
       navigate('/');
